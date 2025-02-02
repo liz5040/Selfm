@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Self-Care App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9f5fb; /* Soft light blue background */
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full height */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 90%;
+            max-width: 400px; /* Limit width for better readability */
+            text-align: center; /* Center text */
+        }
+
+        h1 {
+            font-size: 28px; /* Larger font size for the heading */
+            margin-bottom: 20px;
+            color: #2c3e50; /* Darker blue for the heading */
+        }
+
+        .form-group {
+            margin-bottom: 20px; /* Increased margin for better spacing */
+        }
+
+        label {
+            font-size: 18px; /* Larger font size for labels */
+            display: block; /* Make labels block elements */
+            margin-bottom: 5px; /* Space between label and input */
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 12px; /* Increased padding for easier interaction */
+            border: 2px solid #3498db; /* Soft blue border */
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 18px; /* Larger font size for readability */
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db; /* Soft blue for buttons */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 20px; /* Larger font size for buttons */
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+        }
+
+        .icon {
+            font-size: 50px; /* Larger icon size */
+            margin-bottom: 20px; /* Space between icon and heading */
+            color: #3498db; /* Icon color */
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 1rem;
+        }
+
+        .toggle-form {
+            margin-top: 1rem;
+            color: #3498db;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <i class="fas fa-user-circle icon"></i> <!-- User icon -->
+        <h1>Sign Up</h1>
+        
+        <!-- Sign Up Form -->
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="signupEmail">Email:</label>
+                <input type="email" id="signupEmail" name="signupEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="signupPassword">Password:</label>
+                <input type="password" id="signupPassword" name="signupPassword" required>
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <!-- Link to Login Page -->
+        <div class="toggle-form">
+            Already have an account? <a href="login.html">Login</a>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-message"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script>
+        // Replace with your Firebase project configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDS5GwDHpEFtiB2XLZ_USh2xmID9ly05E",
+  authDomain: "serene-f5620.firebaseapp.com",
+  projectId: "serene-f5620",
+  storageBucket: "serene-f5620.firebasestorage.app",
+  messagingSenderId: "721564678278",
+  appId: "1:721564678278:web:ecbc5287740642d389b907",
+  measurementId: "G-M0NCDH5P39"        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+    </script>
+
+    <!-- Sign Up Script -->
+    <script>
+        // Handle Sign Up Form Submission
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            console.log('Attempting to sign up with:', email); // Debug log
+
+            // Firebase Authentication - Create User
+            auth.createUserWithEmailAndPassword(email, password) // Corrected method name
+                .then((userCredential) => {
+                    console.log('Sign up successful:', userCredential); // Debug log
+                    // Redirect to profile page after successful signup
+                    window.location.href = 'profile.html';
+                })
+                .catch((error) => {
+                    // Handle errors
+                    const errorMessage = document.getElementById('errorMessage');
+                    console.error('Sign up error:', error); // Debug log
+                    switch (error.code) {
+                        case 'auth/email-already-in-use':
+                            errorMessage.textContent = 'Email is already in use.';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage.textContent = 'Invalid email address.';
+                            break;
+                        case 'auth/weak-password':
+                            errorMessage.textContent = 'Password is too weak (min 6 characters).';
+                            break;
+                        default:
+                            errorMessage.textContent = 'Sign up failed. Please try again.';
+                    }
+                });
+        });
+    </script>
+</body>
+</html>

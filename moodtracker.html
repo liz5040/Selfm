@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9f5fb; /* Soft light blue background */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #2c3e50; /* Darker blue for the heading */
+        }
+
+        .mood-options {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .mood-option {
+            cursor: pointer;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .mood-option.selected {
+            border: 2px solid #3498db;
+        }
+
+        .mood-option i {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .mood-comment {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mood Tracker</h1>
+        <div class="mood-options">
+            <div class="mood-option" onclick="selectMood('happy')">
+                <i class="fas fa-smile" style="color: #f1c40f;"></i>
+                <div>Happy</div>
+            </div>
+            <div class="mood-option" onclick="selectMood('sad')">
+                <i class="fas fa-sad-tear" style="color: #3498db;"></i>
+                <div>Sad</div>
+            </div>
+            <div class="mood-option" onclick="selectMood('angry')">
+                <i class="fas fa-angry" style="color: #e74c3c;"></i>
+                <div>Angry</div>
+            </div>
+            <div class="mood-option" onclick="selectMood('calm')">
+                <i class="fas fa-spa" style="color: #2ecc71;"></i>
+                <div>Calm</div>
+            </div>
+        </div>
+        <div class="mood-comment" id="moodComment"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <!-- Mood Tracker Script -->
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDS5GwDHpEFtiB2XLZ_USh2xmID9ly05E",
+  authDomain: "serene-f5620.firebaseapp.com",
+  projectId: "serene-f5620",
+  storageBucket: "serene-f5620.firebasestorage.app",
+  messagingSenderId: "721564678278",
+  appId: "1:721564678278:web:ecbc5287740642d389b907",
+  measurementId: "G-M0NCDH5P39"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Mood Tracker Logic
+        let selectedMood = null;
+
+        function selectMood(mood) {
+            selectedMood = mood;
+            updateMoodUI(mood);
+            saveMoodToFirestore(mood);
+        }
+
+        function updateMoodUI(mood) {
+            const moodOptions = document.querySelectorAll('.mood-option');
+            moodOptions.forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            const selectedOption = document.querySelector(`.mood-option[onclick="selectMood('${mood}')"]`);
+            selectedOption.classList.add('selected');
+
+            const moodComment = document.getElementById('moodComment');
+            switch (mood) {
+                case 'happy':
+                    moodComment.textContent = "You're feeling happy! Keep smiling!";
+                    break;
+                case 'sad':
+                    moodComment.textContent = "It's okay to feel sad. Let's talk about it.";
+                    break;
+                case 'angry':
+                    moodComment.textContent = "Take a deep breath. You can handle this.";
+                    break;
+                case 'calm':
+                    moodComment.textContent = "You're feeling calm. Enjoy the peace.";
+                    break;
+                default:
+                    moodComment.textContent = "";
+            }
+        }
+
+        function saveMoodToFirestore(mood) {
+            const moodData = {
+                mood: mood,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            db.collection("moods").add(moodData)
+                .then(() => {
+                    console.log("Mood saved to Firestore:", mood);
+                })
+                .catch((error) => {
+                    console.error("Error saving mood:", error);
+                });
+        }
+    </script>
+</body>
+</html>
