@@ -1,14 +1,14 @@
-# [Project Name] 🎯
+## SERENE 🎯
 
 
 ## Basic Details
-### Team Name: [Name]
+### Team Name: [Lumina]
 
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+- Member 1: [Liz Maria Biju] - [Muthoot Institute of Technology and Science]
+- Member 2: [Jesna Paulose] - [Muthoot Institute of Technology and Science]
+- Member 3: [Megha Koottalla] - [Muthoot Institute of Technology and Science]
 
 ### Hosted Project Link
 [mention your project hosted project link here]
