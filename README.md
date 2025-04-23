@@ -6,9 +6,9 @@
 
 
 ### Team Members
-- Member 1: [Liz Maria Biju] - [Muthoot Institute of Technology and Science]
-- Member 2: [Jesna Paulose] - [Muthoot Institute of Technology and Science]
-- Member 3: [Megha Koottalla] - [Muthoot Institute of Technology and Science]
+- Member 1: Liz Maria Biju - Muthoot Institute of Technology and Science
+- Member 2: Jesna Paulose - Muthoot Institute of Technology and Science
+- Member 3: Megha Koottalla - Muthoot Institute of Technology and Science
 
 ### Hosted Project Link
 [mention your project hosted project link here]
